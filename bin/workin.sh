@@ -1,0 +1,1 @@
+java -cp /Users/seol/Dropbox/marketboro/commute/commute.jar seol.commute.CommuteApplication workIn

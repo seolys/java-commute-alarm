@@ -1,3 +1,5 @@
+package seol.commute.service.impl;
+
 import java.io.IOException;
 import java.util.Map;
 import org.json.simple.JSONObject;
@@ -6,17 +8,16 @@ import org.json.simple.parser.ParseException;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import seol.commute.common.EnvUtil;
+import seol.commute.common.PropertiesUtil;
+import seol.commute.service.ApiService;
 
-public class Scraping {
+public class ApiServiceImpl implements ApiService {
+		public static final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 "
+				+ "Whale/2.8.105.18 Safari/537.36";
 
-	public static void main(String[] args) throws IOException, ParseException {
-		String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.18 Safari/537.36";
-		JSONObject request = new JSONObject();
-		request.put("username", "아이디");
-		request.put("password", "패스워드");
-		request.put("returnUrl", "/");
-
+	@Override
+	public Map<String, String> login() throws IOException {
 		System.out.println("[JAVA->WEB] https://marketboro.daouoffice.com/api/login");
 		Connection.Response loginPageResponse = Jsoup.connect("https://marketboro.daouoffice.com/api/login")
 				.timeout(3000)
@@ -25,14 +26,28 @@ public class Scraping {
 				.header("User-Agent", userAgent)
 				.header("X-Requested-With", "XMLHttpRequest")
 				.method(Method.POST)
-				.requestBody(request.toJSONString())
+				.requestBody(makeLoginRequestBody())
 				.ignoreContentType(true)
 				.execute();
 		System.out.println("[JAVA<-WEB] https://marketboro.daouoffice.com/api/login");
 
 		// 로그인 페이지에서 얻은 쿠키
 		Map<String, String> loginCookie = loginPageResponse.cookies();
+		return loginCookie;
+	}
 
+	private String makeLoginRequestBody() {
+		JSONObject request = new JSONObject();
+		String envKeyId = PropertiesUtil.getValue("env.key.id");
+		String endKeyPassword = PropertiesUtil.getValue("env.key.password");
+		request.put("username", EnvUtil.getValue(envKeyId));
+		request.put("password", EnvUtil.getValue(endKeyPassword));
+		request.put("returnUrl", "/");
+		return request.toJSONString();
+	}
+
+	@Override
+	public String getWorkInTime(Map<String, String> loginCookie) throws IOException, ParseException {
 		System.out.println("[JAVA->WEB] https://marketboro.daouoffice.com/api/ehr/side");
 		Connection.Response sideResponse = Jsoup.connect("https://marketboro.daouoffice.com/api/ehr/side")
 				.userAgent(userAgent)
@@ -65,5 +80,6 @@ public class Scraping {
 		String workOutTime = (String) timelineSide.get("workOutTime");
 		System.out.println("workInTime = " + workInTime);
 		System.out.println("workOutTime = " + workOutTime);
+		return workInTime;
 	}
 }
