@@ -27,7 +27,7 @@
 ![screenshot](./image/1_7.png)
 
 (7) Output Directory 지정
-    - 특정 경로 지정 하고 그 경로에 프로젝트/bin 디렉토리 내에 sh파일들 전부 복사해놓기를 권장함.
+    - 프로젝트에 디렉토리 만들어서 포함시키거나, 특정 디렉토리 생성.
     
 ![screenshot](./image/1_8.png)
 

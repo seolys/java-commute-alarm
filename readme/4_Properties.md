@@ -14,4 +14,10 @@ default.browser=chrome
 ```
 
 (2) jar파일 재생성.
-- Build > Build Artifacts  
+- Build > Build Artifacts
+  
+![screenshot](./image/1_12.png)
+
+![screenshot](./image/1_13.png)
+
+![screenshot](./image/1_14.png)
