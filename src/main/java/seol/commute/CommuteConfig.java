@@ -16,7 +16,7 @@ public class CommuteConfig {
 	}
 
 	public static CommuteService commuteService() {
-		return new CommuteServiceImpl();
+		return new CommuteServiceImpl(apiService(), slackService(), crontabService());
 	}
 
 	public static CrontabService crontabService() {

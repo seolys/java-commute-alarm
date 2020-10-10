@@ -5,8 +5,8 @@ import static seol.commute.Command.valueOf;
 import static seol.commute.Command.workIn;
 import static seol.commute.Command.workOut;
 
+import java.util.Map;
 import seol.commute.Command;
-import seol.commute.CommuteConfig;
 import seol.commute.common.CommandLineExecutor;
 import seol.commute.common.CryptoUtil;
 import seol.commute.common.PropertiesUtil;
@@ -17,9 +17,15 @@ import seol.commute.service.SlackService;
 
 public class CommuteServiceImpl implements CommuteService {
 
-	private ApiService apiService = CommuteConfig.apiService();
-	private SlackService slackService = CommuteConfig.slackService();
-	private CrontabService crontabService = CommuteConfig.crontabService();
+	private final ApiService apiService;
+	private final SlackService slackService;
+	private final CrontabService crontabService;
+
+	public CommuteServiceImpl(ApiService apiService, SlackService slackService, CrontabService crontabService) {
+		this.apiService = apiService;
+		this.slackService = slackService;
+		this.crontabService = crontabService;
+	}
 
 	@Override
 	public void process(String[] args) throws Exception {
@@ -35,9 +41,8 @@ public class CommuteServiceImpl implements CommuteService {
 
 	@Override
 	public void workIn() throws Exception {
-//		Map<String, String> loginCookie = apiService.login();
-//		String workInTime = apiService.getWorkInTime(loginCookie);
-		String workInTime = "09:30:00";
+		Map<String, String> loginCookie = apiService.login();
+		String workInTime = apiService.getWorkInTime(loginCookie);
 		crontabService.makeWorkOutJob(workInTime);
 	}
 
