@@ -8,18 +8,21 @@ import org.json.simple.parser.ParseException;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
+import seol.commute.common.CryptoUtil;
 import seol.commute.common.EnvUtil;
 import seol.commute.common.PropertiesUtil;
 import seol.commute.service.ApiService;
 
 public class ApiServiceImpl implements ApiService {
-		public static final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 "
-				+ "Whale/2.8.105.18 Safari/537.36";
+
+	public static final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 "
+			+ "Whale/2.8.105.18 Safari/537.36";
 
 	@Override
 	public Map<String, String> login() throws IOException {
-		System.out.println("[JAVA->WEB] https://marketboro.daouoffice.com/api/login");
-		Connection.Response loginPageResponse = Jsoup.connect("https://marketboro.daouoffice.com/api/login")
+		final String loginUrl = PropertiesUtil.getValue("url.groupware.login");
+		System.out.println("[JAVA->WEB] " + loginUrl);
+		Connection.Response loginPageResponse = Jsoup.connect(loginUrl)
 				.timeout(3000)
 				.header("Accept", "application/json, text/javascript, */*; q=0.01")
 				.header("Content-Type", "application/json; charset=UTF-8")
@@ -29,7 +32,7 @@ public class ApiServiceImpl implements ApiService {
 				.requestBody(makeLoginRequestBody())
 				.ignoreContentType(true)
 				.execute();
-		System.out.println("[JAVA<-WEB] https://marketboro.daouoffice.com/api/login");
+		System.out.println("[JAVA<-WEB] " + loginUrl);
 
 		// 로그인 페이지에서 얻은 쿠키
 		Map<String, String> loginCookie = loginPageResponse.cookies();
@@ -38,18 +41,37 @@ public class ApiServiceImpl implements ApiService {
 
 	private String makeLoginRequestBody() {
 		JSONObject request = new JSONObject();
-		String envKeyId = PropertiesUtil.getValue("env.key.id");
-		String endKeyPassword = PropertiesUtil.getValue("env.key.password");
-		request.put("username", EnvUtil.getValue(envKeyId));
-		request.put("password", EnvUtil.getValue(endKeyPassword));
+		String loginId = this.getLoginId();
+		String password = this.getPassword();
+		request.put("username", loginId);
+		request.put("password", password);
 		request.put("returnUrl", "/");
 		return request.toJSONString();
 	}
 
+	private String getLoginId() {
+		String envKeyId = PropertiesUtil.getValue("env.key.id");
+		String loginId = EnvUtil.getValue(envKeyId);
+		if (loginId.isEmpty()) {
+			throw new RuntimeException("env id 설정이 누락되었습니다. : " + envKeyId);
+		}
+		return loginId;
+	}
+
+	private String getPassword() {
+		String endKeyPassword = PropertiesUtil.getValue("env.key.password");
+		String envPassword = EnvUtil.getValue(endKeyPassword);
+		if (envPassword.isEmpty()) {
+			throw new RuntimeException("env password 설정이 누락되었습니다. : " + endKeyPassword);
+		}
+		return CryptoUtil.decAES128(envPassword);
+	}
+
 	@Override
 	public String getWorkInTime(Map<String, String> loginCookie) throws IOException, ParseException {
-		System.out.println("[JAVA->WEB] https://marketboro.daouoffice.com/api/ehr/side");
-		Connection.Response sideResponse = Jsoup.connect("https://marketboro.daouoffice.com/api/ehr/side")
+		final String ehrInfoUrl = PropertiesUtil.getValue("url.groupware.ehr.info");
+		System.out.println("[JAVA->WEB] " + ehrInfoUrl);
+		Connection.Response sideResponse = Jsoup.connect(ehrInfoUrl)
 				.userAgent(userAgent)
 				.header("Accept", "application/json, text/javascript, */*; q=0.01")
 				.header("Accept-Encoding", "gzip, deflate, br")
@@ -69,7 +91,7 @@ public class ApiServiceImpl implements ApiService {
 				.ignoreContentType(true)
 				.execute();
 
-		System.out.println("[JAVA<-WEB] https://marketboro.daouoffice.com/api/ehr/side");
+		System.out.println("[JAVA<-WEB] " + ehrInfoUrl);
 		String body = sideResponse.body();
 		System.out.println(body);
 

@@ -1,5 +1,5 @@
 package seol.commute;
 
 public enum Command {
-	workIn, workOut
+	workIn, workOut, password
 }

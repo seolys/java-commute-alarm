@@ -8,8 +8,8 @@ class EnvUtilTest {
 
 	@Test
 	void getValueTest() {
-		String id = EnvUtil.getValue("MARKETBORO_GROUPWARE_ID");
-		String password = EnvUtil.getValue("MARKETBORO_GROUPWARE_PASSWORD");
+		String id = EnvUtil.getValue("MARKETBORO_COMMUTE_GROUPWARE_ID");
+		String password = EnvUtil.getValue("MARKETBORO_COMMUTE_GROUPWARE_PASSWORD");
 		System.out.println("id = " + id);
 		System.out.println("password = " + password);
 		Assertions.assertTrue(StringUtils.isNotBlank(id));

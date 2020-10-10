@@ -1,1 +1,2 @@
-java -cp /Users/seol/Dropbox/marketboro/commute/commute.jar seol.commute.CommuteApplication workOut
+#!/bin/zsh
+sh /Users/seol/Dropbox/marketboro/commute/run.sh workOut

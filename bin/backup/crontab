@@ -1,0 +1,6 @@
+# workin
+* * * * * sh /Users/seol/Dropbox/marketboro/commute/workin.sh >> /Users/seol/Dropbox/marketboro/commute/cron.log 2>&1
+* * * * 1-5 sh /Users/seol/Dropbox/marketboro/commute/workin.sh >> /Users/seol/Dropbox/marketboro/commute/cron.log 2>&1
+
+# workout
+* * * * * sh /Users/seol/Dropbox/marketboro/commute/workout.sh >> /Users/seol/Dropbox/marketboro/commute/cron.log 2>&1

@@ -36,7 +36,6 @@ public class CommandLineExecutor {
         String[] array = cmdList.toArray(new String[cmdList.size()]);
  
         try {
- 
             // 명령어 실행
             process = runtime.exec(array);
  
@@ -64,6 +63,10 @@ public class CommandLineExecutor {
                 // shell 실행이 비정상 종료되었을 경우
                 System.out.println("비정상 종료: " + cmd);
                 System.out.println(successOutput.toString());
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "EUC-KR"));
+                while ((msg = errorReader.readLine()) != null) {
+                    errorOutput.append(msg + System.getProperty("line.separator"));
+                }
             }
  
             // shell 실행시 에러가 발생
@@ -71,6 +74,7 @@ public class CommandLineExecutor {
                 // shell 실행이 비정상 종료되었을 경우
                 System.out.println("오류: " + cmd);
                 System.out.println(successOutput.toString());
+                System.out.println(errorOutput.toString());
             }
  
         } catch (IOException e) {

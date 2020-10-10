@@ -1,9 +1,5 @@
 package seol.commute;
 
-import static seol.commute.Command.valueOf;
-import static seol.commute.Command.workIn;
-import static seol.commute.Command.workOut;
-
 import seol.commute.service.CommuteService;
 
 /**
@@ -17,8 +13,8 @@ import seol.commute.service.CommuteService;
  *
  * 세팅방법.
  * 1. 로그인정보 ENV 세팅.
- *  export MARKETBORO_GROUPWARE_ID="아이디"
- *  export MARKETBORO_GROUPWARE_PASSWORD="패스워드"
+ *  export MARKETBORO_COMMUTE_GROUPWARE_ID="아이디"
+ *  export MARKETBORO_COMMUTE_GROUPWARE_PASSWORD="패스워드"
  *  export MARKETBORO_COMMUTE_SLACK_HOOK_URL="https://hooks.slack.com/services/................"
  *  - 비밀번호에 특수문자 들어가있는경우 echo통해서 잘 나온지 확인필요. ex) $ -> \$ 치환필요
  *  - KEY값 바꾸싶은경우 application.properties 파일에서 변경.
@@ -30,16 +26,10 @@ import seol.commute.service.CommuteService;
 public class CommuteApplication {
 
 	public static void main(String[] args) throws Exception {
-		if(args == null || args.length == 0) {
+		if (args == null || args.length == 0) {
 			throw new RuntimeException("args가 없습니다.");
 		}
 		CommuteService commuteService = CommuteConfig.commuteService();
-
-		Command command = valueOf(args[0]);
-		if(workIn == command) {
-			commuteService.workIn();
-		} else if(workOut == command){
-			commuteService.workOut();
-		}
+		commuteService.process(args);
 	}
 }

@@ -7,19 +7,24 @@
 
 ## 세팅방법
 ### 1. env 설정.
+- 암호화 password만들기
+```
+password.sh "패스워드"
+```
 - .zsh기준, profile파일 오픈
 ```
 vi ~/.zshrc 
 ```
 - 로그인 및 Slack 정보 설정.
 ```
-export MARKETBORO_GROUPWARE_ID="아이디"
-export MARKETBORO_GROUPWARE_PASSWORD="패스워드"
+export MARKETBORO_COMMUTE_GROUPWARE_ID="아이디"
+export MARKETBORO_COMMUTE_GROUPWARE_PASSWORD="암호화된패스워드"
 export MARKETBORO_COMMUTE_SLACK_HOOK_URL="https://hooks.slack.com/services/................"
+export MARKETBORO_COMMUTE_AES128_KEY="16자리_아무_영숫자"
 ```
 - 비밀번호에 특수문자 들어가있는경우 echo통해서 잘 나온지 확인필요. ex) $ -> \$ 치환필요
 ```
-echo $MARKETBORO_GROUPWARE_PASSWORD
+echo $MARKETBORO_COMMUTE_GROUPWARE_PASSWORD
 ```
 
 ### 2. application.properties 수정.
