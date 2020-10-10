@@ -1,12 +1,17 @@
 ## 프로세스
-1. crontab에 설정된 workin.sh이 실행된다.
+1. sh파일들은 CommuteApplication.java의 main프로그램을 실행한다.(jar파일 내 main메소드)
+2. crontab에 설정된 workin.sh이 실행된다.
     1. workin.sh는 crontab에 설정되어있는 기존 workout.sh Job을 삭제한다.
+        - [crontab 스케쥴 자동으로 추가/삭제](https://sub0709.tistory.com/112)
     2. 그룹웨어를 호출하여 출근시간을 취득한다.
+        1. jsoup라이브러리를 활용하여 로그인 후 로그인쿠키를 취득한다.
+        2. 로그인 쿠키를 통해 출근시간 API를 호출하여 정보를 얻는다.
+        - jsoup는 스크래핑도 가능한데 여기서는 AJAX로 모든화면이 구성되어있어서 활용할곳이 없음.
     3. 출근시간으로 퇴근시간을 계산 후, 퇴근시간에 workout.sh이 실행될 수 있도록 crontab을 설정한다.
-2. crontab에 설정된 workout.sh이 실행된다.
+3. crontab에 설정된 workout.sh이 실행된다.
     1. Slack WebHook에 연결된 채널로 알림메시지를 전송한다.
     2. MacOS AppleScript를 통해 브라우저앱이 실행되고, 그룹웨어 URL을 호출한다.
-3. 1~2가 매일 반복된다.(평일)
+4. 2~3이 평일에 반복 실행된다.
 
 ---
  
