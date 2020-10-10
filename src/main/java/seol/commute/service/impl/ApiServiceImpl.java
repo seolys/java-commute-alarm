@@ -1,5 +1,8 @@
 package seol.commute.service.impl;
 
+import static seol.commute.common.ApplicationConstants.Env.MARKETBORO_COMMUTE_GROUPWARE_ID;
+import static seol.commute.common.ApplicationConstants.Env.MARKETBORO_COMMUTE_GROUPWARE_PASSWORD;
+
 import java.io.IOException;
 import java.util.Map;
 import org.json.simple.JSONObject;
@@ -17,6 +20,7 @@ public class ApiServiceImpl implements ApiService {
 
 	public static final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 "
 			+ "Whale/2.8.105.18 Safari/537.36";
+
 
 	@Override
 	public Map<String, String> login() throws IOException {
@@ -50,19 +54,17 @@ public class ApiServiceImpl implements ApiService {
 	}
 
 	private String getLoginId() {
-		String envKeyId = PropertiesUtil.getValue("env.key.id");
-		String loginId = EnvUtil.getValue(envKeyId);
+		String loginId = EnvUtil.getValue(MARKETBORO_COMMUTE_GROUPWARE_ID);
 		if (loginId.isEmpty()) {
-			throw new RuntimeException("env id 설정이 누락되었습니다. : " + envKeyId);
+			throw new RuntimeException("env id 설정이 누락되었습니다. : " + MARKETBORO_COMMUTE_GROUPWARE_ID);
 		}
 		return loginId;
 	}
 
 	private String getPassword() {
-		String endKeyPassword = PropertiesUtil.getValue("env.key.password");
-		String envPassword = EnvUtil.getValue(endKeyPassword);
+		String envPassword = EnvUtil.getValue(MARKETBORO_COMMUTE_GROUPWARE_PASSWORD);
 		if (envPassword.isEmpty()) {
-			throw new RuntimeException("env password 설정이 누락되었습니다. : " + endKeyPassword);
+			throw new RuntimeException("env password 설정이 누락되었습니다. : " + MARKETBORO_COMMUTE_GROUPWARE_PASSWORD);
 		}
 		return CryptoUtil.decAES128(envPassword);
 	}
