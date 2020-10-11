@@ -13,6 +13,9 @@
     2. MacOS AppleScript를 통해 브라우저앱이 실행되고, 그룹웨어 URL을 호출한다.
 4. 2~3이 평일에 반복 실행된다.
 
+
+※ 주요정보(로그인정보, SlackWebHookUrl 등..)는 PC(또는 server)의 Environment Variable로 관리한다.
+
 ---
  
 ## 세팅방법
