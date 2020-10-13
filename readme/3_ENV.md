@@ -6,6 +6,7 @@
     cd /Users/seol/Dropbox/marketboro/commute
     chmod +x *.sh
     ```
+- 참고 : https://boro.atlassian.net/wiki/spaces/~794817334/pages/700350465/env
 
 (1) 계정정보 비밀번호 암호화를 위한 AES128 Key, SLACK HOOK URL 설정.
 ```
