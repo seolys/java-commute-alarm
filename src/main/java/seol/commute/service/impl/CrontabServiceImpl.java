@@ -26,7 +26,7 @@ public class CrontabServiceImpl implements CrontabService {
 		workInTime = isNotEmpty(workInTime) ? workInTime : "09:30:00";
 		int hour = Integer.parseInt(workInTime.substring(0, 2));
 		int minute = Integer.parseInt(workInTime.substring(3, 5));
-		LocalTime workOutTime = LocalTime.of(hour, minute).plusHours(9);
+		LocalTime workOutTime = LocalTime.of(hour, minute).plusHours(9).plusMinutes(5);
 		return workOutTime;
 	}
 
