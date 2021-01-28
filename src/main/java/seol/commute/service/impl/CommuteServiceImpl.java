@@ -4,6 +4,7 @@ import static seol.commute.Command.password;
 import static seol.commute.Command.valueOf;
 import static seol.commute.Command.workIn;
 import static seol.commute.Command.workOut;
+import static seol.commute.common.StringUtils.isEmpty;
 
 import java.util.Map;
 import seol.commute.Command;
@@ -43,6 +44,11 @@ public class CommuteServiceImpl implements CommuteService {
 	public void workIn() throws Exception {
 		Map<String, String> loginCookie = apiService.login();
 		String workInTime = apiService.getWorkInTime(loginCookie);
+		
+		if (isEmpty(workInTime)) {
+			slackService.sendMessage("출근하기를 눌러주세요.\n" + PropertiesUtil.getValue("url.groupware.ehr.page"));
+			return;
+		}
 		crontabService.makeWorkOutJob(workInTime);
 	}
 

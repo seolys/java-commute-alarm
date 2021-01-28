@@ -1,5 +1,7 @@
 package seol.commute.service.impl;
 
+import static seol.commute.common.StringUtils.isNotEmpty;
+
 import java.time.LocalTime;
 import seol.commute.common.CommandLineExecutor;
 import seol.commute.common.PropertiesUtil;
@@ -28,10 +30,6 @@ public class CrontabServiceImpl implements CrontabService {
 		int minute = Integer.parseInt(workInTime.substring(3, 5));
 		LocalTime workOutTime = LocalTime.of(hour, minute).plusHours(9).plusMinutes(5);
 		return workOutTime;
-	}
-
-	private boolean isNotEmpty(String str) {
-		return str != null && !str.isEmpty() && !"null".equals(str);
 	}
 
 }
